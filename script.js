@@ -87,13 +87,32 @@ function loadLessons() {
 }
 
 function saveAsImage() {
-    html2canvas(document.querySelector("#lessonTable")).then(canvas => {
+    let table = document.getElementById("lessonTable");
+
+    // Nasconde i bordi degli input per migliorare l'immagine
+    let inputs = table.querySelectorAll("input");
+    inputs.forEach(input => {
+        input.setAttribute("data-value", input.value);
+        input.style.border = "none";
+    });
+
+    html2canvas(table, {
+        backgroundColor: "#ffffff", // Sfondo bianco per l'immagine
+        scale: 2 // Migliore qualità dell'immagine
+    }).then(canvas => {
         let link = document.createElement("a");
         link.href = canvas.toDataURL("image/png");
         link.download = "registro_lezioni.png";
         link.click();
+
+        // Ripristina i bordi degli input
+        inputs.forEach(input => {
+            input.style.border = "";
+        });
     });
 }
+
+
 function sortTableByDate() {
     let lessons = JSON.parse(localStorage.getItem("lessons")) || [];
 
