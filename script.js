@@ -41,15 +41,13 @@ function deleteRow(button) {
 function highlightPaymentGroups() {
     let rows = Array.from(document.querySelectorAll("#lessonTable tbody tr"));
 
-    // Rimuove la vecchia evidenziazione
+    // Rimuove qualsiasi evidenziazione esistente
     rows.forEach(row => row.classList.remove("highlight"));
 
-    // Conta 8 lezioni a partire dall'ultima (la più vecchia) e evidenzia la riga corrispondente
+    // Conta 8 lezioni partendo dal basso e evidenzia SOLO l'ottava, la sedicesima, ecc.
     let totalRows = rows.length;
-    for (let i = totalRows - 1; i >= 0; i -= 8) {
-        if (i >= 0) {
-            rows[i].classList.add("highlight");
-        }
+    for (let i = totalRows - 8; i >= 0; i -= 8) {
+        rows[i].classList.add("highlight");
     }
 }
 
