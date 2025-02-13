@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", loadLessons);
 
 function addLesson() {
+    let dateInput = document.getElementById("manualDate").value;
     let today = new Date();
-    let day = today.toLocaleDateString('it-IT', { weekday: 'long' });
-    let date = today.toLocaleDateString('it-IT');
+    
+    let selectedDate = dateInput ? new Date(dateInput) : today;
+    let day = selectedDate.toLocaleDateString('it-IT', { weekday: 'long' });
+    let date = selectedDate.toLocaleDateString('it-IT');
 
     addRow(day, date, "", "");
     saveLessons();
@@ -16,8 +19,8 @@ function addRow(day, date, startTime, endTime) {
     row.innerHTML = `
         <td>${day}</td>
         <td>${date}</td>
-        <td><input type="time" value="${startTime}"></td>
-        <td><input type="time" value="${endTime}"></td>
+        <td><input type="time" value="${startTime}" onchange="saveLessons()"></td>
+        <td><input type="time" value="${endTime}" onchange="saveLessons()"></td>
         <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
     `;
 
@@ -55,32 +58,11 @@ function saveLessons() {
     localStorage.setItem("lessons", JSON.stringify(lessons));
 }
 
-function addLesson() {
-    let dateInput = document.getElementById("manualDate").value;
-    let today = new Date();
-    
-    let selectedDate = dateInput ? new Date(dateInput) : today;
-    let day = selectedDate.toLocaleDateString('it-IT', { weekday: 'long' });
-    let date = selectedDate.toLocaleDateString('it-IT');
-
-    addRow(day, date, "", "");
-    saveLessons();
-}
-
-function saveAsPDF() {
-    html2canvas(document.querySelector("#lessonTable")).then(canvas => {
-        let imgData = canvas.toDataURL("image/png");
-        let pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 10, 10, 190, 0);
-        pdf.save("registro_lezioni.pdf");
-    });
-}
-
-function saveAsImage() {
-    html2canvas(document.querySelector("#lessonTable")).then(canvas => {
-        let link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "registro_lezioni.png";
-        link.click();
-    });
+function loadLessons() {
+    let lessons = JSON.parse(localStorage.getItem("lessons"));
+    if (lessons) {
+        lessons.forEach(lesson => {
+            addRow(lesson.day, lesson.date, lesson.startTime, lesson.endTime);
+        });
+    }
 }
