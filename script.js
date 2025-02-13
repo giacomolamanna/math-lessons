@@ -39,10 +39,18 @@ function deleteRow(button) {
 }
 
 function highlightPaymentGroups() {
-    let rows = document.querySelectorAll("#lessonTable tbody tr");
-    rows.forEach((row, index) => {
-        row.classList.toggle("highlight", (index + 1) % 8 === 0);
-    });
+    let rows = Array.from(document.querySelectorAll("#lessonTable tbody tr"));
+
+    // Rimuove la vecchia evidenziazione
+    rows.forEach(row => row.classList.remove("highlight"));
+
+    // Conta 8 lezioni a partire dall'ultima (la più vecchia) e evidenzia la riga corrispondente
+    let totalRows = rows.length;
+    for (let i = totalRows - 1; i >= 0; i -= 8) {
+        if (i >= 0) {
+            rows[i].classList.add("highlight");
+        }
+    }
 }
 
 function saveLessons() {
