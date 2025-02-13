@@ -10,6 +10,7 @@ function addLesson() {
 
     addRow(day, date, "", "");
     saveLessons();
+    sortTableByDate(); // Ordina subito la tabella dopo l'aggiunta
 }
 
 function addRow(day, date, startTime, endTime) {
@@ -24,8 +25,8 @@ function addRow(day, date, startTime, endTime) {
         <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
     `;
 
-    highlightPaymentGroups();
     saveLessons();
+    sortTableByDate(); // Ordina sempre la tabella dopo ogni modifica
 }
 
 function deleteRow(button) {
@@ -33,6 +34,7 @@ function deleteRow(button) {
         let row = button.parentElement.parentElement;
         row.remove();
         saveLessons();
+        sortTableByDate();
     }
 }
 
@@ -55,14 +57,41 @@ function saveLessons() {
         };
         lessons.push(lesson);
     });
+    
+    // Salva i dati ordinati per data
+    lessons.sort((a, b) => new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-')));
     localStorage.setItem("lessons", JSON.stringify(lessons));
+
+    loadLessons(); // Ricarica la tabella con l'ordine corretto
 }
 
 function loadLessons() {
-    let lessons = JSON.parse(localStorage.getItem("lessons"));
-    if (lessons) {
-        lessons.forEach(lesson => {
-            addRow(lesson.day, lesson.date, lesson.startTime, lesson.endTime);
-        });
-    }
+    let lessons = JSON.parse(localStorage.getItem("lessons")) || [];
+    let table = document.getElementById("lessonTable").getElementsByTagName('tbody')[0];
+    
+    // Svuota la tabella prima di ricaricarla
+    table.innerHTML = "";
+
+    lessons.forEach(lesson => {
+        let row = table.insertRow();
+        row.innerHTML = `
+            <td>${lesson.day}</td>
+            <td>${lesson.date}</td>
+            <td><input type="time" value="${lesson.startTime}" onchange="saveLessons()"></td>
+            <td><input type="time" value="${lesson.endTime}" onchange="saveLessons()"></td>
+            <td><button class="delete-btn" onclick="deleteRow(this)">🗑</button></td>
+        `;
+    });
+
+    highlightPaymentGroups();
+}
+
+function sortTableByDate() {
+    let lessons = JSON.parse(localStorage.getItem("lessons")) || [];
+
+    // Ordina la lista in base alla data (dal più recente al più remoto)
+    lessons.sort((a, b) => new Date(b.date.split('/').reverse().join('-')) - new Date(a.date.split('/').reverse().join('-')));
+
+    localStorage.setItem("lessons", JSON.stringify(lessons));
+    loadLessons(); // Ricarica la tabella con l'ordine corretto
 }
