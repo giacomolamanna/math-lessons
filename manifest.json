@@ -1,0 +1,15 @@
+{
+    "name": "Registro Lezioni",
+    "short_name": "Registro",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#2196F3",
+    "icons": [
+        {
+            "src": "icon_math.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
