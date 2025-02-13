@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Lezioni</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Registro Lezioni Private</h1>
+    <input type="date" id="manualDate">
+    <button onclick="addLesson()">Presenza</button>
+    <button onclick="saveAsPDF()">Salva come PDF</button>
+    <button onclick="saveAsImage()">Salva come Immagine</button>
+
+    <table id="lessonTable">
+        <thead>
+            <tr>
+                <th>Giorno</th>
+                <th>Data</th>
+                <th>Orario Arrivo</th>
+                <th>Orario Fine</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Lezioni verranno aggiunte qui -->
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+</body>
+</html>
