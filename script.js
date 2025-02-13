@@ -86,6 +86,14 @@ function loadLessons() {
     highlightPaymentGroups();
 }
 
+function saveAsImage() {
+    html2canvas(document.querySelector("#lessonTable")).then(canvas => {
+        let link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "registro_lezioni.png";
+        link.click();
+    });
+}
 function sortTableByDate() {
     let lessons = JSON.parse(localStorage.getItem("lessons")) || [];
 
